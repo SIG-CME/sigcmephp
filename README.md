@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
@@ -231,3 +232,7 @@ vendor/bin/codecept run functional,unit -- --coverage-html --coverage-xml
 ```
 
 You can see code coverage output under the `tests/_output` directory.
+=======
+# sicmephp
+Sistema informatizado para aplicação do lean healthcare em Centro de Material e Esterilização
+>>>>>>> 5333d7f95114ae79845fe23473bd1d3258f9d53b
