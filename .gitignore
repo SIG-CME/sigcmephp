@@ -47,4 +47,7 @@ phpunit.phar
 /backend/web/index-test.php
 /backend/web/robots.txt
 
+#ignore db.php
+/config/db.php
+
 # End of https://www.gitignore.io/api/yii2
