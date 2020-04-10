@@ -46,7 +46,7 @@ class Material extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nome' => 'Nome',
-            'categoriaid' => 'Categoriaid',
+            'categoriaid' => 'Categoria',
         ];
     }
 

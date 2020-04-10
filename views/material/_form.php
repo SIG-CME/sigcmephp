@@ -17,8 +17,6 @@ $listCategoria=ArrayHelper::map($categorias,'id','descricao');
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id')->textInput() ?>
-
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'categoriaid')->dropDownList($listCategoria) ?>

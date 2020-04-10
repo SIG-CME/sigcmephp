@@ -13,6 +13,7 @@ return [
     //'schemaCache' => 'cache',
 ];
 */
+
 return [
     'class' => 'yii\db\Connection',
     'dsn' => 'pgsql:host=tuffi.db.elephantsql.com;port=5432;dbname=zrcumjfi;',
