@@ -29,11 +29,10 @@ class Material extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'categoriaid'], 'required'],
-            [['id', 'categoriaid'], 'default', 'value' => null],
-            [['id', 'categoriaid'], 'integer'],
+            [['categoriaid'], 'required'],
+            [['categoriaid'], 'default', 'value' => null],
+            [['categoriaid'], 'integer'],
             [['nome'], 'string', 'max' => 300],
-            [['id'], 'unique'],
             [['categoriaid'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::className(), 'targetAttribute' => ['categoriaid' => 'id']],
         ];
     }

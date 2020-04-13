@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Categoria */
+/* @var $model app\models\Requisicao */
 
-$this->title = 'Criar Categoria';
-$this->params['breadcrumbs'][] = ['label' => 'Categorias', 'url' => ['index']];
+$this->title = Yii::t('app', 'Criar Nova Requisicao');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Requisições'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="categoria-create">
+<div class="requisicao-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

@@ -13,11 +13,8 @@ $this->title = 'My Yii Application';
     <div class="body-content">
 
         <div class="list-group">
-            <a href="/categoria" class="list-group-item list-group-item-action">
-                Cadastro de Categorias
-            </a>
-            <a href="/material" class="list-group-item list-group-item-action">
-                Cadastro de Materiais
+            <a href="/requisicao/create" class="btn btn-lg btn-success">
+                Criar requisição
             </a>
 
         </div>
