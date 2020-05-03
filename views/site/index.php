@@ -7,7 +7,8 @@ $this->title = 'My Yii Application';
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>SI-CME!</h1>
+        <h1>SIGCME</h1>
+        <h3>Sistema Informatizado de Gestão para Centro de Material e Esterilização</h3>
     </div>
 
     <div class="body-content">

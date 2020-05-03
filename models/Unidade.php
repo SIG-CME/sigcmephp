@@ -38,7 +38,7 @@ class Unidade extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'descricao' => Yii::t('app', 'Descrição'),
+            'descricao' => Yii::t('app', 'Unidade'),
         ];
     }
 }

@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'nome',
             ['attribute' => 'categoria.descricao'],
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'app\components\MyActionColumn'],
         ],
     ]); ?>
 

@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use kartik\grid\GridView;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Requisicao */
@@ -30,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'data',
-            'unidadeid',
+            'data:date',
+            'unidade.descricao',
         ],
     ]) ?>
 

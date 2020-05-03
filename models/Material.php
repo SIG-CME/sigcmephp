@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+
 
 /**
  * This is the model class for table "material".
@@ -57,5 +59,16 @@ class Material extends \yii\db\ActiveRecord
     public function getCategoria()
     {
         return $this->hasOne(Categoria::className(), ['id' => 'categoriaid']);
+    }
+
+     /**
+     * Get all the available categories (*4)
+     * @return array available categories
+     */
+    public static function getAvailableMaterials()
+    {
+        $materiais = self::find()->orderBy('nome')->asArray()->all();
+        $items = ArrayHelper::map($materiais, 'id', 'nome');
+        return $items;
     }
 }

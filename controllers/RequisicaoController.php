@@ -5,6 +5,9 @@ namespace app\controllers;
 use Yii;
 use app\models\Requisicao;
 use app\models\RequisicaoSearch;
+use app\models\RequisicaoWithMaterial;
+use app\models\Material;
+use app\models\RequisicaoMaterial;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -53,7 +56,7 @@ class RequisicaoController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($id)
         ]);
     }
 
@@ -64,14 +67,17 @@ class RequisicaoController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Requisicao();
+        $model = new RequisicaoWithMaterial();
+        $model->data = date("d/m/yy");
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->saveMateriais();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'materiais' => Material::getAvailableMaterials(),
         ]);
     }
 
@@ -84,14 +90,18 @@ class RequisicaoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        
+        $model = RequisicaoWithMaterial::findOne($id);
+        $model->loadMateriais();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->saveMateriais();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'materiais' => Material::getAvailableMaterials(),
         ]);
     }
 
@@ -123,5 +133,10 @@ class RequisicaoController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionInsereMaterial()
+    {
+        return $this->renderPartial('inserematerial', []);
     }
 }

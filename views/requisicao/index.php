@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use app\components\MyActionColumn;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\RequisicaoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,13 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
-            'data',
-            'unidadeid',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            'data:date',
+            ['attribute' => 'unidade.descricao'],
+            ['class' => 'app\components\MyActionColumn'],
         ],
     ]); ?>
 

@@ -44,6 +44,7 @@ AppAsset::register($this);
                 ['label' => 'Categorias', 'url' => '/categoria'],
                 ['label' => 'Materiais', 'url' => '/material'],
                 ['label' => 'Unidades Funcionais', 'url' => '/unidade'],
+                ['label' => 'Requisições', 'url' => '/requisicao'],
             ]],
             ['label' => 'Contato', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
