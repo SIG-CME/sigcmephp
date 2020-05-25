@@ -74,7 +74,8 @@ class RequisicaoController extends Controller
     public function actionCreate()
     {
         $model = new Requisicao();
-        $model->data = date("d/m/yy");
+        date_default_timezone_set('America/Sao_Paulo');
+        $model->data = date("d/m/yy H:i");
 
         if ($model->load(Yii::$app->request->post())) {
             $model->data = MyFormatter::convert($model->data, 'datetime');

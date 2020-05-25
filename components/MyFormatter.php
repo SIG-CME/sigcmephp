@@ -8,7 +8,7 @@ class MyFormatter {
     const TIME_FORMAT = 'php:H:i:s';
 
     public static function convert($dateStr, $type='date', $format = null) {
-        $date = \DateTime::createFromFormat('d/m/yy', $dateStr);
+        $date = \DateTime::createFromFormat('d/m/yy H:i', $dateStr);
         if ($type === 'datetime') {
               $fmt = ($format == null) ? self::DATETIME_FORMAT : $format;
         }

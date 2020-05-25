@@ -29,7 +29,7 @@ $config = [
             'errorAction' => 'site/error',
         ],
         'formatter' => [
-            'dateFormat' => 'dd/MM/yyyy',
+            'dateFormat' => 'dd/MM/yyyy HH:mm',
             'decimalSeparator' => ',',
             'thousandSeparator' => '.',
             'currencyCode' => 'BRL',

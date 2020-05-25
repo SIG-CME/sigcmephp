@@ -9,7 +9,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use kartik\form\ActiveForm;
-use kartik\date\DatePicker;
+use kartik\datetime\DateTimePicker;
 use kartik\select2\Select2;
 use kartik\builder\TabularForm;
 use kartik\grid\GridView;
@@ -28,7 +28,13 @@ $listUnidades = ArrayHelper::map($unidades, 'id', 'descricao');
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'data')->widget(DatePicker::className(), ['language' => 'pt-BR']) ?>
+    <?= $form->field($model, 'data')->widget(DateTimePicker::className(), [
+            'language' => 'pt-BR',
+            'pluginOptions' => [
+                'autoclose' => true,
+                'format' => 'dd/mm/yyyy hh:ii'
+            ]
+        ]) ?>
 
     <?= $form->field($model, 'unidadeid')->widget(Select2::className(), ['data' => $listUnidades]) ?>
 
