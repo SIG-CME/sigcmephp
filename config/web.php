@@ -7,7 +7,7 @@ $config = [
     'id' => 'basic',
     'name' => 'SIG-CME',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['debug'],
     'language' => 'pt-BR',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -61,6 +61,14 @@ $config = [
         
     ],
     'params' => $params,
+    'modules' => [
+        'gridview' =>  [
+             'class' => '\kartik\grid\Module'
+        ],
+        'debug' => [
+            'class' => 'yii\debug\Module',
+        ],
+     ]
 ];
 
 if (YII_ENV_DEV) {

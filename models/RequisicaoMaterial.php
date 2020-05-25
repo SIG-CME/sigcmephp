@@ -9,6 +9,8 @@ use Yii;
  *
  * @property int $requisicao_id
  * @property int $material_id
+ * @property int $id
+ * @property int|null $quantidade
  *
  * @property Material $material
  * @property Requisicao $requisicao
@@ -29,11 +31,10 @@ class RequisicaoMaterial extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['requisicao_id', 'material_id'], 'required'],
-            [['requisicao_id', 'material_id'], 'default', 'value' => null],
-            [['requisicao_id', 'material_id'], 'integer'],
+            [['quantidade', 'material_id'], 'required'],
+            [['requisicao_id', 'material_id', 'quantidade'], 'default', 'value' => null],
+            [['requisicao_id', 'material_id', 'quantidade'], 'integer'],
             [['material_id'], 'exist', 'skipOnError' => true, 'targetClass' => Material::className(), 'targetAttribute' => ['material_id' => 'id']],
-            [['requisicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => Requisicao::className(), 'targetAttribute' => ['requisicao_id' => 'id']],
         ];
     }
 
@@ -45,6 +46,8 @@ class RequisicaoMaterial extends \yii\db\ActiveRecord
         return [
             'requisicao_id' => Yii::t('app', 'Requisicao ID'),
             'material_id' => Yii::t('app', 'Material ID'),
+            'id' => Yii::t('app', 'ID'),
+            'quantidade' => Yii::t('app', 'Quantidade'),
         ];
     }
 

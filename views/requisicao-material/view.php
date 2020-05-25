@@ -2,18 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use kartik\grid\GridView;
-
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Requisicao */
+/* @var $model app\models\RequisicaoMaterial */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Requisições'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Requisicao Materials'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="requisicao-view">
+<div class="requisicao-material-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -31,20 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'data:date',
-            'unidade.descricao',
-        ],
-    ]) ?>
-    <hr/>
-    <h3>Materiais</h3>
-    <?= GridView::widget([
-        'dataProvider' => $materiais,
-       // 'filterModel' => $searchModel,
-        'columns' => [
+            'requisicao_id',
             ['attribute' => 'material.nome'],
             'quantidade',
-],
-    ]); ?>
+        ],
+    ]) ?>
 
 </div>

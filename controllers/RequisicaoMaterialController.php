@@ -3,20 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Requisicao;
-use app\models\RequisicaoSearch;
+use app\models\RequisicaoMaterial;
 use app\models\RequisicaoMaterialSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\components\MyFormatter;
-use yii\helpers\Url;
-use  yii\web\Session;
 
 /**
- * RequisicaoController implements the CRUD actions for Requisicao model.
+ * RequisicaoMaterialController implements the CRUD actions for RequisicaoMaterial model.
  */
-class RequisicaoController extends Controller
+class RequisicaoMaterialController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -29,19 +25,23 @@ class RequisicaoController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
-            ],
+            ]
         ];
     }
 
     /**
-     * Lists all Requisicao models.
+     * Lists all RequisicaoMaterial models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new RequisicaoSearch();
+        $searchModel = new RequisicaoMaterialSearch();
+        
+        $session = Yii::$app->session;
+        $id_requisicao = $session['id_requisicao'];
+        
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $dataProvider->query->where(['requisicao_id' => $id_requisicao]);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -49,41 +49,32 @@ class RequisicaoController extends Controller
     }
 
     /**
-     * Displays a single Requisicao model.
+     * Displays a single RequisicaoMaterial model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $searchModel = new RequisicaoMaterialSearch();
-                
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->where(['requisicao_id' => $id]);
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'materiais' => $dataProvider
         ]);
     }
 
     /**
-     * Creates a new Requisicao model.
+     * Creates a new RequisicaoMaterial model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Requisicao();
-        $model->data = date("d/m/yy");
+        $model = new RequisicaoMaterial();
+        $session = Yii::$app->session;
+        $id_requisicao = $session['id_requisicao'];
+        $model->requisicao_id = $id_requisicao;
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->data = MyFormatter::convert($model->data, 'datetime');
-            if ($model->save()) {
-                $session = Yii::$app->session;
-                $session['id_requisicao'] = $model->id;
-                $url = Url::to(['/requisicao-material/index']);
-                return $this->redirect($url);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -92,7 +83,7 @@ class RequisicaoController extends Controller
     }
 
     /**
-     * Updates an existing Requisicao model.
+     * Updates an existing RequisicaoMaterial model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -100,9 +91,10 @@ class RequisicaoController extends Controller
      */
     public function actionUpdate($id)
     {
-
-        $model = Requisicao::findOne($id);
-        $model->loadMateriais();
+        $model = $this->findModel($id);
+        $session = Yii::$app->session;
+        $id_requisicao = $session['id_requisicao'];
+        $model->requisicao_id = $id_requisicao;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -114,7 +106,7 @@ class RequisicaoController extends Controller
     }
 
     /**
-     * Deletes an existing Requisicao model.
+     * Deletes an existing RequisicaoMaterial model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -128,26 +120,18 @@ class RequisicaoController extends Controller
     }
 
     /**
-     * Finds the Requisicao model based on its primary key value.
+     * Finds the RequisicaoMaterial model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Requisicao the loaded model
+     * @return RequisicaoMaterial the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Requisicao::findOne($id)) !== null) {
+        if (($model = RequisicaoMaterial::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
-    }
-
-    public function actionMateriais($id)
-    {
-        $session = Yii::$app->session;
-        $session['id_requisicao'] = $id;
-        $url = Url::to(['/requisicao-material/index']);
-        return $this->redirect($url);
     }
 }

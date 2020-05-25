@@ -17,7 +17,9 @@ $this->title = 'My Yii Application';
             <a href="/requisicao/create" class="btn btn-lg btn-success">
                 Criar requisição
             </a>
-
+            <a href="/requisicao/index" class="btn btn-lg btn-info">
+                Listagem de requisições
+            </a>
         </div>
 
     </div>

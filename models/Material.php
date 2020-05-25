@@ -62,8 +62,8 @@ class Material extends \yii\db\ActiveRecord
     }
 
      /**
-     * Get all the available categories (*4)
-     * @return array available categories
+     * Get all the available materiais (*4)
+     * @return array available materiais
      */
     public static function getAvailableMaterials()
     {

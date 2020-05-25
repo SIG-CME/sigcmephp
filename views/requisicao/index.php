@@ -24,12 +24,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+       // 'filterModel' => $searchModel,
         'columns' => [
             'id',
             'data:date',
             ['attribute' => 'unidade.descricao'],
-            ['class' => 'app\components\MyActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{materiais}',
+                'header' => 'Materiais',
+                'buttons' => [
+                    'materiais' => function ($url) {
+                        return Html::a(
+                            '<span class="btn btn-info glyphicon glyphicon-barcode"></span>',
+                            $url, 
+                            [
+                                'title' => 'Materiais',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+                ]
+                ],
+            ['header'=> 'Ações','class' => 'app\components\MyActionColumn'],
         ],
     ]); ?>
 
