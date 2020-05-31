@@ -30,6 +30,9 @@ class Categoria extends \yii\db\ActiveRecord
         return [
             [['descricao'], 'required'],
             [['descricao'], 'string', 'max' => 50],
+            [['badge'], 'string', 'max' => 100],
+            [['badge'], 'required'],
+            [['sigla'], 'required'],
         ];
     }
 
@@ -40,7 +43,9 @@ class Categoria extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'descricao' => 'Descricao',
+            'descricao' => 'Categoria',
+            'badge' => 'Badge',
+            'sigla' => 'Sigla'
         ];
     }
 

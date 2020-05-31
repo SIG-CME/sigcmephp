@@ -120,7 +120,7 @@ class RequisicaoMaterialController extends Controller
  
          $materiaisDisponiveis = Material::find()->all();
  
-         return $this->render('create', [
+         return $this->render('update', [
              'model' => $model,
              'materiais' => $dataProvider,
              'materiaisDisponiveis' => $materiaisDisponiveis

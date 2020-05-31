@@ -8,7 +8,7 @@ use kartik\grid\GridView;
 /* @var $model app\models\RequisicaoMaterial */
 
 $this->title = Yii::t('app', 'Create Requisicao Material');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Requisicao Materials'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Requisicao Materiais'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="requisicao-material-create">
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $materiais,
        // 'filterModel' => $searchModel,
         'columns' => [
-            ['attribute' => 'material.nome'],
+            'material.nomebadge:html',
             'quantidade',
 ],
     ]); ?>

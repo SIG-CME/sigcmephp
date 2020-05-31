@@ -11,7 +11,7 @@ use kartik\select2\Select2;
 /* @var $form yii\widgets\ActiveForm */
 
 
-$listMateriais = ArrayHelper::map($materiaisDisponiveis, 'id', 'nome');
+$listMateriais = ArrayHelper::map($materiaisDisponiveis, 'id', 'nomecat');
 
 ?>
 
@@ -19,7 +19,11 @@ $listMateriais = ArrayHelper::map($materiaisDisponiveis, 'id', 'nome');
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'material_id')->widget(Select2::className(), ['data' => $listMateriais]) ?>
+    <?= $form->field($model, 'material_id')->widget(Select2::className(), 
+        ['data' => $listMateriais,
+        'pluginOptions' => [
+            'allowClear' => true
+        ]]) ?>
 
     <?= $form->field($model, 'quantidade')->textInput() ?>
 

@@ -25,8 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             'id',
-            'nome',
-            ['attribute' => 'categoria.descricao'],
+            'nomebadge:html',
             ['class' => 'app\components\MyActionColumn'],
         ],
     ]); ?>

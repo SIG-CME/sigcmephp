@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'descricao',
+            'badge:html',
 
             ['class' => 'app\components\MyActionColumn'],
         ],

@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\RequisicaoMaterial */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Requisicao Materials'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Requisicao Materiais'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'requisicao_id',
-            ['attribute' => 'material.nome'],
+            'material.nomebadge:html',
             'quantidade',
         ],
     ]) ?>
