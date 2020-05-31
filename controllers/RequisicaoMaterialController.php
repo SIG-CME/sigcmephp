@@ -5,6 +5,9 @@ namespace app\controllers;
 use Yii;
 use app\models\RequisicaoMaterial;
 use app\models\RequisicaoMaterialSearch;
+use app\models\Material;
+use app\models\MaterialSearch;
+use app\models\Requisicao;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -74,11 +77,21 @@ class RequisicaoMaterialController extends Controller
         $model->requisicao_id = $id_requisicao;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         }
+
+        # Carrega materiais
+        $searchModel = new RequisicaoMaterialSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->where(['requisicao_id' => $model->requisicao_id]);
+
+        $idsJaSelecionados = RequisicaoMaterial::find()->where(['requisicao_id' => $model->requisicao_id])->select(['material_id']);
+        $materiaisDisponiveis = Material::find()->where(['not in','id',$idsJaSelecionados])->all();
 
         return $this->render('create', [
             'model' => $model,
+            'materiais' => $dataProvider,
+            'materiaisDisponiveis' => $materiaisDisponiveis
         ]);
     }
 
@@ -100,9 +113,18 @@ class RequisicaoMaterialController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+         # Carrega materiais
+         $searchModel = new RequisicaoMaterialSearch();
+         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+         $dataProvider->query->where(['requisicao_id' => $model->requisicao_id]);
+ 
+         $materiaisDisponiveis = Material::find()->all();
+ 
+         return $this->render('create', [
+             'model' => $model,
+             'materiais' => $dataProvider,
+             'materiaisDisponiveis' => $materiaisDisponiveis
+         ]);
     }
 
     /**

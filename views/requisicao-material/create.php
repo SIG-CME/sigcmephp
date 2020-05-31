@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+use kartik\grid\GridView;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\RequisicaoMaterial */
@@ -15,6 +17,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'materiaisDisponiveis'=>$materiaisDisponiveis
     ]) ?>
+
+    <h3>Materiais já cadastrados</h3>
+    <?= GridView::widget([
+        'dataProvider' => $materiais,
+       // 'filterModel' => $searchModel,
+        'columns' => [
+            ['attribute' => 'material.nome'],
+            'quantidade',
+],
+    ]); ?>
 
 </div>

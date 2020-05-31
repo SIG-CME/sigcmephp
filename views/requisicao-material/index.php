@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\RequisicaoMaterialSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Requisicao Materials');
+$this->title = Yii::t('app', 'Requisição Materiais');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="requisicao-material-index">

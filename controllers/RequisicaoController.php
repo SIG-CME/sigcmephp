@@ -11,7 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\MyFormatter;
 use yii\helpers\Url;
-use  yii\web\Session;
+use yii\web\Session;
 
 /**
  * RequisicaoController implements the CRUD actions for Requisicao model.
@@ -82,7 +82,7 @@ class RequisicaoController extends Controller
             if ($model->save()) {
                 $session = Yii::$app->session;
                 $session['id_requisicao'] = $model->id;
-                $url = Url::to(['/requisicao-material/index']);
+                $url = Url::to(['/requisicao-material/create']);
                 return $this->redirect($url);
             }
         }
@@ -103,8 +103,7 @@ class RequisicaoController extends Controller
     {
 
         $model = Requisicao::findOne($id);
-        $model->loadMateriais();
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }

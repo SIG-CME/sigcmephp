@@ -1,18 +1,18 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
-use app\models\Material;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\RequisicaoMaterial */
 /* @var $form yii\widgets\ActiveForm */
 
 
-$materiais = Material::find()->all();
-$listMateriais = ArrayHelper::map($materiais, 'id', 'nome');
+$listMateriais = ArrayHelper::map($materiaisDisponiveis, 'id', 'nome');
+
 ?>
 
 <div class="requisicao-material-form">
@@ -24,7 +24,8 @@ $listMateriais = ArrayHelper::map($materiais, 'id', 'nome');
     <?= $form->field($model, 'quantidade')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Adicionar'), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Voltar para listagem'), Url::toRoute('/requisicao/index'), ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
