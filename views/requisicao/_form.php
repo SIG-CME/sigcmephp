@@ -28,7 +28,7 @@ $listUnidades = ArrayHelper::map($unidades, 'id', 'descricao');
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'data')->widget(DateTimePicker::className(), [
+    <?= $form->field($model, 'data')->widget(DateTimePicker::class, [
             'language' => 'pt-BR',
             'pluginOptions' => [
                 'autoclose' => true,
@@ -36,7 +36,11 @@ $listUnidades = ArrayHelper::map($unidades, 'id', 'descricao');
             ]
         ]) ?>
 
-    <?= $form->field($model, 'unidadeid')->widget(Select2::className(), ['data' => $listUnidades]) ?>
+    <?= $form->field($model, 'unidadeid')->widget(Select2::class, ['data' => $listUnidades]) ?>
+    
+    <?= $form->field($model, 'tipo')->hiddenInput(['value' => 'Coleta'])->label(false) ?>
+
+    <?= $form->field($model, 'status')->hiddenInput(['value' => 'Coleta'])->label(false) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Salvar'), ['class' => 'btn btn-success']) ?>

@@ -6,12 +6,17 @@ use Yii;
 use app\models\Requisicao;
 use app\models\RequisicaoSearch;
 use app\models\RequisicaoMaterialSearch;
+use app\models\Expurgo;
+use app\models\ExpurgoMaterial;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\MyFormatter;
+use app\models\RequisicaoMaterial;
 use yii\helpers\Url;
 use yii\web\Session;
+use yii\db\Expression;
+use yii\db\Query;
 
 /**
  * RequisicaoController implements the CRUD actions for Requisicao model.
@@ -148,6 +153,82 @@ class RequisicaoController extends Controller
         $session = Yii::$app->session;
         $session['id_requisicao'] = $id;
         $url = Url::to(['/requisicao-material/index']);
+        return $this->redirect($url);
+    }
+
+    public function actionDistribuicao($id)
+    {
+        $model = $this->findModel($id);
+        $model->tipo = 'Distribuicao';
+        date_default_timezone_set('America/Sao_Paulo');
+        $model->data = date("d/m/yy H:i");
+
+        $model->data = MyFormatter::convert($model->data, 'datetime');
+        if ($model->save()) {
+            $session = Yii::$app->session;
+            $session['id_requisicao'] = $model->id;
+
+            #Carrega todos materiais da requisição original
+            $searchModel = new RequisicaoMaterialSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->where(['requisicao_id' => $id])->all();
+            foreach ($dataProvider as $row) {
+                var_dump($row['materialid']);
+                echo '<br/>';
+            }
+            #$url = Url::to(['/requisicao-material/create']);
+            #return $this->redirect($url);
+        }
+    }
+
+    /**
+     * Creates a new Requisicao model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreateExpurgo()
+    {
+        $expurgo = new Expurgo;
+        date_default_timezone_set('America/Sao_Paulo');
+        
+        $expurgo->data = date("d/m/yy H:i");
+        $expurgo->data = MyFormatter::convert($expurgo->data, 'datetime');
+        $expurgo->status = 'Expurgo';
+        
+        if(!$expurgo->save()){
+            var_dump($expurgo->getErrors());
+        }
+
+        $result = new \yii\db\Query();
+        $result->select(['rm.material_id','SUM(rm.quantidade) AS quantidade'])
+               ->from('requisicao r')
+               ->where(['r.status'=>'Coleta'])
+               ->innerJoin('requisicao_material rm','r.id = rm.requisicao_id')
+               ->groupBy(['rm.material_id'])
+               ->all();
+               
+        $command = $result->createCommand();
+        $data = $command->queryAll();
+        foreach ($data as $row) {
+            $quantidade = $row['quantidade'];
+            $material_id = $row['material_id'];
+            
+            $expurgoMaterial = new ExpurgoMaterial;
+            $expurgoMaterial->expurgo_id = $expurgo->id;
+            $expurgoMaterial->material_id = $material_id;
+            $expurgoMaterial->quantidade = $quantidade;
+
+            if(!$expurgoMaterial->save()){
+                var_dump($expurgoMaterial->getErrors());
+                return;
+            }
+            //$id = $row['id'];
+        }
+
+        #Atualiza as requisições
+        Yii::$app->db->createCommand("UPDATE requisicao SET status = 'Expurgo' WHERE status = 'Coleta'")->execute();
+
+        $url = Url::to(['/requisicao']);
         return $this->redirect($url);
     }
 }

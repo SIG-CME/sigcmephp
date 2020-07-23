@@ -10,8 +10,11 @@ use Yii;
  * @property int $id
  * @property string|null $data
  * @property int $unidadeid
+ * @property string|null $tipo
+ * @property string|null $status
  *
  * @property Unidade $unidade
+ * @property RequisicaoMaterial[] $requisicaoMaterials
  */
 class Requisicao extends \yii\db\ActiveRecord
 {
@@ -29,11 +32,13 @@ class Requisicao extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[ 'unidadeid'], 'required'],
-            [['unidadeid'], 'default', 'value' => null],
-            [['unidadeid'], 'integer'],
+            [['id', 'unidadeid'], 'required'],
+            [['id', 'unidadeid'], 'default', 'value' => null],
+            [['id', 'unidadeid'], 'integer'],
             [['data'], 'safe'],
-            [['unidadeid'], 'exist', 'skipOnError' => true, 'targetClass' => Unidade::className(), 'targetAttribute' => ['unidadeid' => 'id']],
+            [['tipo', 'status'], 'string', 'max' => 50],
+            [['id'], 'unique'],
+            [['unidadeid'], 'exist', 'skipOnError' => true, 'targetClass' => Unidade::class, 'targetAttribute' => ['unidadeid' => 'id']],
         ];
     }
 
@@ -45,17 +50,38 @@ class Requisicao extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'data' => Yii::t('app', 'Data'),
-            'unidadeid' => Yii::t('app', 'Unidade Funcional'),
+            'unidadeid' => Yii::t('app', 'Unidadeid'),
+            'tipo' => Yii::t('app', 'Tipo'),
+            'status' => Yii::t('app', 'Status'),
         ];
     }
 
     /**
      * Gets query for [[Unidade]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return \yii\db\ActiveQuery|yii\db\ActiveQuery
      */
     public function getUnidade()
     {
-        return $this->hasOne(Unidade::className(), ['id' => 'unidadeid']);
+        return $this->hasOne(Unidade::class, ['id' => 'unidadeid']);
+    }
+
+    /**
+     * Gets query for [[RequisicaoMaterials]].
+     *
+     * @return \yii\db\ActiveQuery|yii\db\ActiveQuery
+     */
+    public function getRequisicaoMaterials()
+    {
+        return $this->hasMany(RequisicaoMaterial::class, ['requisicao_id' => 'id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return RequisicaoQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new RequisicaoQuery(get_called_class());
     }
 }
