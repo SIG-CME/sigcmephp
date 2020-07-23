@@ -30,7 +30,7 @@ class RequisicaoController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -81,6 +81,8 @@ class RequisicaoController extends Controller
         $model = new Requisicao();
         date_default_timezone_set('America/Sao_Paulo');
         $model->data = date("d/m/yy H:i");
+        $model->status = 'Coleta';
+        $model->tipo = 'Coleta';
 
         if ($model->load(Yii::$app->request->post())) {
             $model->data = MyFormatter::convert($model->data, 'datetime');
@@ -89,7 +91,7 @@ class RequisicaoController extends Controller
                 $session['id_requisicao'] = $model->id;
                 $url = Url::to(['/requisicao-material/create']);
                 return $this->redirect($url);
-            }
+            } 
         }
 
         return $this->render('create', [

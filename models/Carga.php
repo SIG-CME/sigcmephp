@@ -35,7 +35,7 @@ class Carga extends \yii\db\ActiveRecord
             [['id', 'categoriaid'], 'integer'],
             [['data'], 'safe'],
             [['id'], 'unique'],
-            [['categoriaid'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::className(), 'targetAttribute' => ['categoriaid' => 'id']],
+            [['categoriaid'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoriaid' => 'id']],
         ];
     }
 
@@ -58,7 +58,7 @@ class Carga extends \yii\db\ActiveRecord
      */
     public function getCategoria()
     {
-        return $this->hasOne(Categoria::className(), ['id' => 'categoriaid']);
+        return $this->hasOne(Categoria::class, ['id' => 'categoriaid']);
     }
 
     /**
@@ -68,6 +68,6 @@ class Carga extends \yii\db\ActiveRecord
      */
     public function getRequisicaoMaterials()
     {
-        return $this->hasMany(RequisicaoMaterial::className(), ['carga_id' => 'id']);
+        return $this->hasMany(RequisicaoMaterial::class, ['carga_id' => 'id']);
     }
 }

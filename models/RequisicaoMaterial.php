@@ -34,7 +34,7 @@ class RequisicaoMaterial extends \yii\db\ActiveRecord
             [['quantidade', 'material_id'], 'required'],
             [['requisicao_id', 'material_id', 'quantidade'], 'default', 'value' => null],
             [['requisicao_id', 'material_id', 'quantidade'], 'integer'],
-            [['material_id'], 'exist', 'skipOnError' => true, 'targetClass' => Material::className(), 'targetAttribute' => ['material_id' => 'id']],
+            [['material_id'], 'exist', 'skipOnError' => true, 'targetClass' => Material::class, 'targetAttribute' => ['material_id' => 'id']],
         ];
     }
 
@@ -58,7 +58,7 @@ class RequisicaoMaterial extends \yii\db\ActiveRecord
      */
     public function getMaterial()
     {
-        return $this->hasOne(Material::className(), ['id' => 'material_id']);
+        return $this->hasOne(Material::class, ['id' => 'material_id']);
     }
 
     /**
@@ -68,6 +68,6 @@ class RequisicaoMaterial extends \yii\db\ActiveRecord
      */
     public function getRequisicao()
     {
-        return $this->hasOne(Requisicao::className(), ['id' => 'requisicao_id']);
+        return $this->hasOne(Requisicao::class, ['id' => 'requisicao_id']);
     }
 }

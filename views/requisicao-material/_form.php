@@ -19,7 +19,7 @@ $listMateriais = ArrayHelper::map($materiaisDisponiveis, 'id', 'nomecat');
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'material_id')->widget(Select2::className(), 
+    <?= $form->field($model, 'material_id')->widget(Select2::class, 
         ['data' => $listMateriais,
         'pluginOptions' => [
             'allowClear' => true

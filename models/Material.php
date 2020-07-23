@@ -36,7 +36,7 @@ class Material extends \yii\db\ActiveRecord
             [['categoriaid'], 'integer'],
             [['nome'], 'string', 'max' => 300],
             [['nomebadge'], 'string', 'max' => 300],
-            [['categoriaid'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::className(), 'targetAttribute' => ['categoriaid' => 'id']],
+            [['categoriaid'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoriaid' => 'id']],
         ];
     }
 
@@ -60,7 +60,7 @@ class Material extends \yii\db\ActiveRecord
      */
     public function getCategoria()
     {
-        return $this->hasOne(Categoria::className(), ['id' => 'categoriaid']);
+        return $this->hasOne(Categoria::class, ['id' => 'categoriaid']);
     }
 
     public function getNomeBadge()

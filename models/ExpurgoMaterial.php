@@ -37,9 +37,9 @@ class ExpurgoMaterial extends \yii\db\ActiveRecord
             [['expurgo_id', 'material_id', 'carga_id', 'quantidade'], 'default', 'value' => null],
             [['expurgo_id', 'material_id', 'carga_id', 'id', 'quantidade'], 'integer'],
             [['id'], 'unique'],
-            [['carga_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carga::className(), 'targetAttribute' => ['carga_id' => 'id']],
-            [['expurgo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Expurgo::className(), 'targetAttribute' => ['expurgo_id' => 'id']],
-            [['material_id'], 'exist', 'skipOnError' => true, 'targetClass' => Material::className(), 'targetAttribute' => ['material_id' => 'id']],
+            [['carga_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carga::class, 'targetAttribute' => ['carga_id' => 'id']],
+            [['expurgo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Expurgo::class, 'targetAttribute' => ['expurgo_id' => 'id']],
+            [['material_id'], 'exist', 'skipOnError' => true, 'targetClass' => Material::class, 'targetAttribute' => ['material_id' => 'id']],
         ];
     }
 
@@ -64,7 +64,7 @@ class ExpurgoMaterial extends \yii\db\ActiveRecord
      */
     public function getCarga()
     {
-        return $this->hasOne(Carga::className(), ['id' => 'carga_id']);
+        return $this->hasOne(Carga::class, ['id' => 'carga_id']);
     }
 
     /**
@@ -74,7 +74,7 @@ class ExpurgoMaterial extends \yii\db\ActiveRecord
      */
     public function getExpurgo()
     {
-        return $this->hasOne(Expurgo::className(), ['id' => 'expurgo_id']);
+        return $this->hasOne(Expurgo::class, ['id' => 'expurgo_id']);
     }
 
     /**
@@ -84,7 +84,7 @@ class ExpurgoMaterial extends \yii\db\ActiveRecord
      */
     public function getMaterial()
     {
-        return $this->hasOne(Material::className(), ['id' => 'material_id']);
+        return $this->hasOne(Material::class, ['id' => 'material_id']);
     }
 
     /**

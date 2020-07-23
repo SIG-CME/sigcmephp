@@ -56,6 +56,6 @@ class Categoria extends \yii\db\ActiveRecord
      */
     public function getMaterials()
     {
-        return $this->hasMany(Material::className(), ['categoriaid' => 'id']);
+        return $this->hasMany(Material::class, ['categoriaid' => 'id']);
     }
 }

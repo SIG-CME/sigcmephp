@@ -57,7 +57,7 @@ class Expurgo extends \yii\db\ActiveRecord
      */
     public function getExpurgoMaterials()
     {
-        return $this->hasMany(ExpurgoMaterial::className(), ['expurgo_id' => 'id']);
+        return $this->hasMany(ExpurgoMaterial::class, ['expurgo_id' => 'id']);
     }
 
     /**

@@ -32,8 +32,8 @@ class Requisicao extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'unidadeid'], 'required'],
-            [['id', 'unidadeid'], 'default', 'value' => null],
+            [['unidadeid'], 'required'],
+            [['unidadeid'], 'default', 'value' => null],
             [['id', 'unidadeid'], 'integer'],
             [['data'], 'safe'],
             [['tipo', 'status'], 'string', 'max' => 50],
@@ -50,7 +50,7 @@ class Requisicao extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'data' => Yii::t('app', 'Data'),
-            'unidadeid' => Yii::t('app', 'Unidadeid'),
+            'unidadeid' => Yii::t('app', 'Unidade Funcional'),
             'tipo' => Yii::t('app', 'Tipo'),
             'status' => Yii::t('app', 'Status'),
         ];
