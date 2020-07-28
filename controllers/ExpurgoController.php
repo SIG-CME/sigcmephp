@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Expurgo;
 use app\models\ExpurgoSearch;
+use app\models\ExpurgoMaterialSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,8 +53,13 @@ class ExpurgoController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new ExpurgoMaterialSearch();
+                
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->where(['expurgo_id' => $id]);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'materiais' => $dataProvider
         ]);
     }
 

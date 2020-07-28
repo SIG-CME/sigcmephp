@@ -8,6 +8,8 @@ use app\models\CargaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\ExpurgoMaterialSearch;
+use app\components\MyFormatter;
 
 /**
  * CargaController implements the CRUD actions for Carga model.
@@ -52,8 +54,13 @@ class CargaController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new ExpurgoMaterialSearch();
+                
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->where(['carga_id' => $id]);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'materiais' => $dataProvider
         ]);
     }
 
@@ -65,8 +72,14 @@ class CargaController extends Controller
     public function actionCreate()
     {
         $model = new Carga();
+        date_default_timezone_set('America/Sao_Paulo');
+        $model->data = date("yy/m/d H:i");
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->data = MyFormatter::convert($model->data, 'datetime');
+            #Atualiza as requisições
+            Yii::$app->db->createCommand("UPDATE expurgo_material SET carga_id = $model->id WHERE carga_id is null and material_id in (select id from material where categoriaid = $model->categoriaid);")->execute();
+            
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

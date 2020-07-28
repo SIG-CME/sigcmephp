@@ -30,8 +30,8 @@ class Carga extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'categoriaid'], 'required'],
-            [['id', 'categoriaid'], 'default', 'value' => null],
+            [['categoriaid'], 'required'],
+            [['categoriaid'], 'default', 'value' => null],
             [['id', 'categoriaid'], 'integer'],
             [['data'], 'safe'],
             [['id'], 'unique'],
@@ -47,7 +47,7 @@ class Carga extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'data' => Yii::t('app', 'Data'),
-            'categoriaid' => Yii::t('app', 'Categoriaid'),
+            'categoriaid' => Yii::t('app', 'Categoria'),
         ];
     }
 

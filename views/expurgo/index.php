@@ -14,10 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Expurgo'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
@@ -30,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'data',
             'status',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'app\components\MyActionColumn'],
         ],
     ]); ?>
 
