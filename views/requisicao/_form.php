@@ -19,7 +19,7 @@ use yii\data\ActiveDataProvider;
 /* @var $model app\models\Requisicao */
 /* @var $form yii\widgets\ActiveForm */
 
-$unidades = Unidade::find()->all();
+$unidades = Unidade::find()->orderBy(["descricao"=>SORT_ASC])->all();
 $listUnidades = ArrayHelper::map($unidades, 'id', 'descricao');
 
 ?>

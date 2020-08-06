@@ -160,27 +160,52 @@ class RequisicaoController extends Controller
 
     public function actionDistribuicao($id)
     {
-        $model = $this->findModel($id);
+        $modelOrigem = $this->findModel($id);
+        
+        $model = new Requisicao;
         $model->tipo = 'Distribuicao';
+        $model->unidadeid = $modelOrigem->unidadeid;
+        $model->status = 'Distribuicao';
+
         date_default_timezone_set('America/Sao_Paulo');
         $model->data = date("d/m/yy H:i");
 
         $model->data = MyFormatter::convert($model->data, 'datetime');
+        $model->oldAttributes = null;
+        
         if ($model->save()) {
             $session = Yii::$app->session;
             $session['id_requisicao'] = $model->id;
 
             #Carrega todos materiais da requisição original
-            $searchModel = new RequisicaoMaterialSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider->query->where(['requisicao_id' => $id])->all();
-            foreach ($dataProvider as $row) {
-                var_dump($row['materialid']);
-                echo '<br/>';
+            $result = new \yii\db\Query();
+            $result->select(['rm.material_id','rm.quantidade'])
+                ->from('requisicao_material rm')
+                ->where(['rm.requisicao_id'=>$id])
+                ->all();
+                
+            $command = $result->createCommand();
+            $data = $command->queryAll();
+            
+            foreach ($data as $row) {
+                $quantidade = $row['quantidade'];
+                $material_id = $row['material_id'];
+                
+                $requisicaoMaterial = new RequisicaoMaterial;
+                $requisicaoMaterial->requisicao_id = $model->id;
+                $requisicaoMaterial->material_id = $material_id;
+                $requisicaoMaterial->quantidade = $quantidade;
+
+                if(!$requisicaoMaterial->save()){
+                    var_dump($requisicaoMaterial->getErrors());
+                    return;
+                }
             }
-            #$url = Url::to(['/requisicao-material/create']);
-            #return $this->redirect($url);
+            $url = Url::to(['/requisicao/view?id=$id']);
+            return $this->redirect($url);
         }
+
+        var_dump($model->getErrors());
     }
 
     /**
@@ -190,6 +215,24 @@ class RequisicaoController extends Controller
      */
     public function actionCreateExpurgo()
     {
+        # Primeiro executa a query pra verificar se existe alguma requisição de coleta
+        $result = new \yii\db\Query();
+        $result->select(['rm.material_id','SUM(rm.quantidade) AS quantidade'])
+               ->from('requisicao r')
+               ->where(['r.status'=>'Coleta'])
+               ->innerJoin('requisicao_material rm','r.id = rm.requisicao_id')
+               ->groupBy(['rm.material_id'])
+               ->all();
+               
+        $command = $result->createCommand();
+        $data = $command->queryAll();
+
+        if (count($data)==0){
+            Yii::$app->session->setFlash('error','Não foi possível criar expurgo pois não há requisições com status [Coleta].');
+            return $this->actionIndex();
+        }
+        
+
         $expurgo = new Expurgo;
         date_default_timezone_set('America/Sao_Paulo');
         
@@ -201,16 +244,6 @@ class RequisicaoController extends Controller
             var_dump($expurgo->getErrors());
         }
 
-        $result = new \yii\db\Query();
-        $result->select(['rm.material_id','SUM(rm.quantidade) AS quantidade'])
-               ->from('requisicao r')
-               ->where(['r.status'=>'Coleta'])
-               ->innerJoin('requisicao_material rm','r.id = rm.requisicao_id')
-               ->groupBy(['rm.material_id'])
-               ->all();
-               
-        $command = $result->createCommand();
-        $data = $command->queryAll();
         foreach ($data as $row) {
             $quantidade = $row['quantidade'];
             $material_id = $row['material_id'];

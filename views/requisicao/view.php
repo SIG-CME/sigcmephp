@@ -34,6 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'data:date',
             'unidade.descricao',
+            'tipo',
+            'status',
         ],
     ]) ?>
     <hr/>

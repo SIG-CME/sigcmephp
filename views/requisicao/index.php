@@ -3,9 +3,25 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\dialog\Dialog;
 
 $this->title = Yii::t('app', 'Requisições');
 $this->params['breadcrumbs'][] = $this->title;
+echo Dialog::widget();
+
+$js = <<< JS
+$("#btn-criar-expurgo").on("click", function() {
+    krajeeDialog.confirm("Tem certeza que deseja criar o expurgo?", function (result) {
+        if (result) {
+            window.location.href = '/requisicao/create-expurgo';
+        };
+    });
+});
+JS;
+ 
+// register your javascript
+$this->registerJs($js);
+
 ?>
 <div class="requisicao-index">
 
@@ -13,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('app', 'Create Requisicao'), ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('app', 'Criar Expurgo'), ['create-expurgo'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Criar Expurgo'), null, ['class' => 'btn btn-primary','id'=>'btn-criar-expurgo']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
