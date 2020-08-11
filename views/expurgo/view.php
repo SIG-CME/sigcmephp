@@ -31,6 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['attribute' => 'material.nome'],
             'quantidade',
+            [
+                'label' => 'Foi para Carga',
+                'value' => function ($model) {
+                    return $model->carga_id > 0 ? 'Sim' : 'Não';
+                }
+              ],
             'observacao',
             [
                 'class' => 'yii\grid\ActionColumn',
