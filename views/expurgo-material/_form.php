@@ -12,15 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'expurgo_id')->textInput() ?>
-
-    <?= $form->field($model, 'material_id')->textInput() ?>
-
-    <?= $form->field($model, 'carga_id')->textInput() ?>
-
-    <?= $form->field($model, 'id')->textInput() ?>
-
-    <?= $form->field($model, 'quantidade')->textInput() ?>
+    <?= $form->field($model, 'observacao')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

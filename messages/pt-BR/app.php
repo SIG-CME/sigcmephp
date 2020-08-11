@@ -9,5 +9,6 @@ return [
     'Create Requisicao Material'=>'Adicionar Material',
     'Create Requisicao'=> 'Criar Requisição',
     'Create Carga'=> 'Criar Carga',
+    'Update Expurgo Material: {name}' => 'Atualizar Observação de Expurgo'
 ];
 ?>

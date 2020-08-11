@@ -3,24 +3,43 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\ExpurgoMaterial;
-use app\models\ExpurgoMaterialSearch;
+use app\models\Usuario;
+use app\models\UsuarioSearch;
+
+use app\models\Modulo;
+use app\models\UsuarioWithModulo;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\helpers\Url;
+use yii\filters\AccessControl;
+
+use yii\Helpers\ArrayHelper;
 
 /**
- * ExpurgoMaterialController implements the CRUD actions for ExpurgoMaterial model.
+ * UsuarioController implements the CRUD actions for Usuario model.
  */
-class ExpurgoMaterialController extends Controller
+class UsuarioController extends Controller
 {
+
+    public $module_ids = [];
+
     /**
      * {@inheritdoc}
      */
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'view', 'update', 'create', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
@@ -31,12 +50,12 @@ class ExpurgoMaterialController extends Controller
     }
 
     /**
-     * Lists all ExpurgoMaterial models.
+     * Lists all Usuario models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ExpurgoMaterialSearch();
+        $searchModel = new UsuarioSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,8 +65,8 @@ class ExpurgoMaterialController extends Controller
     }
 
     /**
-     * Displays a single ExpurgoMaterial model.
-     * @param integer $id
+     * Displays a single Usuario model.
+     * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -59,50 +78,57 @@ class ExpurgoMaterialController extends Controller
     }
 
     /**
-     * Creates a new ExpurgoMaterial model.
+     * Creates a new Usuario model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new ExpurgoMaterial();
+        $model = new UsuarioWithModulo();
+        $model->scenario = 'create';
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())){
+            if($model->save()){
+                $model->saveModulos();
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('create', [
             'model' => $model,
+            'modules' => $this->allModules()
         ]);
     }
 
     /**
-     * Updates an existing ExpurgoMaterial model.
+     * Updates an existing Usuario model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            
-            $url = Url::to(['/expurgo/view', 'id'=>$model->expurgo_id]);
-            return $this->redirect($url);
-            #return $this->redirect(['view', 'id' => $model->id]);
+        $model = UsuarioWithModulo::findOne(['id', $id]);
+        $model->loadModules();
+        
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->save()){
+                $model->saveModulos();
+                return $this->redirect(['index']);
+            }
         }
-
+        $model->senha = '';
         return $this->render('update', [
             'model' => $model,
+            'modules' => $this->allModules()
         ]);
     }
 
     /**
-     * Deletes an existing ExpurgoMaterial model.
+     * Deletes an existing Usuario model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -114,18 +140,23 @@ class ExpurgoMaterialController extends Controller
     }
 
     /**
-     * Finds the ExpurgoMaterial model based on its primary key value.
+     * Finds the Usuario model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return ExpurgoMaterial the loaded model
+     * @param string $id
+     * @return Usuario the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ExpurgoMaterial::findOne($id)) !== null) {
+        if (($model = Usuario::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    protected function allModules()
+    {
+        return ArrayHelper::map(Modulo::find()->all(), 'id', 'nome');
     }
 }

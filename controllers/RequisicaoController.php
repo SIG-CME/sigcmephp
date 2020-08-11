@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
 use app\components\MyFormatter;
 use app\models\RequisicaoMaterial;
 use yii\helpers\Url;
+use yii\filters\AccessControl;
 use yii\web\Session;
 use yii\db\Expression;
 use yii\db\Query;
@@ -29,6 +30,16 @@ class RequisicaoController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'view', 'update', 'create', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
@@ -62,7 +73,7 @@ class RequisicaoController extends Controller
     public function actionView($id)
     {
         $searchModel = new RequisicaoMaterialSearch();
-                
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->where(['requisicao_id' => $id]);
         return $this->render('view', [
@@ -91,7 +102,7 @@ class RequisicaoController extends Controller
                 $session['id_requisicao'] = $model->id;
                 $url = Url::to(['/requisicao-material/create']);
                 return $this->redirect($url);
-            } 
+            }
         }
 
         return $this->render('create', [
@@ -110,7 +121,7 @@ class RequisicaoController extends Controller
     {
 
         $model = Requisicao::findOne($id);
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -161,7 +172,7 @@ class RequisicaoController extends Controller
     public function actionDistribuicao($id)
     {
         $modelOrigem = $this->findModel($id);
-        
+
         $model = new Requisicao;
         $model->tipo = 'Distribuicao';
         $model->unidadeid = $modelOrigem->unidadeid;
@@ -172,31 +183,31 @@ class RequisicaoController extends Controller
 
         $model->data = MyFormatter::convert($model->data, 'datetime');
         $model->oldAttributes = null;
-        
+
         if ($model->save()) {
             $session = Yii::$app->session;
             $session['id_requisicao'] = $model->id;
 
             #Carrega todos materiais da requisição original
             $result = new \yii\db\Query();
-            $result->select(['rm.material_id','rm.quantidade'])
+            $result->select(['rm.material_id', 'rm.quantidade'])
                 ->from('requisicao_material rm')
-                ->where(['rm.requisicao_id'=>$id])
+                ->where(['rm.requisicao_id' => $id])
                 ->all();
-                
+
             $command = $result->createCommand();
             $data = $command->queryAll();
-            
+
             foreach ($data as $row) {
                 $quantidade = $row['quantidade'];
                 $material_id = $row['material_id'];
-                
+
                 $requisicaoMaterial = new RequisicaoMaterial;
                 $requisicaoMaterial->requisicao_id = $model->id;
                 $requisicaoMaterial->material_id = $material_id;
                 $requisicaoMaterial->quantidade = $quantidade;
 
-                if(!$requisicaoMaterial->save()){
+                if (!$requisicaoMaterial->save()) {
                     var_dump($requisicaoMaterial->getErrors());
                     return;
                 }
@@ -217,43 +228,43 @@ class RequisicaoController extends Controller
     {
         # Primeiro executa a query pra verificar se existe alguma requisição de coleta
         $result = new \yii\db\Query();
-        $result->select(['rm.material_id','SUM(rm.quantidade) AS quantidade'])
-               ->from('requisicao r')
-               ->where(['r.status'=>'Coleta'])
-               ->innerJoin('requisicao_material rm','r.id = rm.requisicao_id')
-               ->groupBy(['rm.material_id'])
-               ->all();
-               
+        $result->select(['rm.material_id', 'SUM(rm.quantidade) AS quantidade'])
+            ->from('requisicao r')
+            ->where(['r.status' => 'Coleta'])
+            ->innerJoin('requisicao_material rm', 'r.id = rm.requisicao_id')
+            ->groupBy(['rm.material_id'])
+            ->all();
+
         $command = $result->createCommand();
         $data = $command->queryAll();
 
-        if (count($data)==0){
-            Yii::$app->session->setFlash('error','Não foi possível criar expurgo pois não há requisições com status [Coleta].');
+        if (count($data) == 0) {
+            Yii::$app->session->setFlash('error', 'Não foi possível criar expurgo pois não há requisições com status [Coleta].');
             return $this->actionIndex();
         }
-        
+
 
         $expurgo = new Expurgo;
         date_default_timezone_set('America/Sao_Paulo');
-        
+
         $expurgo->data = date("d/m/yy H:i");
         $expurgo->data = MyFormatter::convert($expurgo->data, 'datetime');
         $expurgo->status = 'Expurgo';
-        
-        if(!$expurgo->save()){
+
+        if (!$expurgo->save()) {
             var_dump($expurgo->getErrors());
         }
 
         foreach ($data as $row) {
             $quantidade = $row['quantidade'];
             $material_id = $row['material_id'];
-            
+
             $expurgoMaterial = new ExpurgoMaterial;
             $expurgoMaterial->expurgo_id = $expurgo->id;
             $expurgoMaterial->material_id = $material_id;
             $expurgoMaterial->quantidade = $quantidade;
 
-            if(!$expurgoMaterial->save()){
+            if (!$expurgoMaterial->save()) {
                 var_dump($expurgoMaterial->getErrors());
                 return;
             }
@@ -263,7 +274,7 @@ class RequisicaoController extends Controller
         #Atualiza as requisições
         Yii::$app->db->createCommand("UPDATE requisicao SET status = 'Expurgo' WHERE status = 'Coleta'")->execute();
 
-        $url = Url::to(['/requisicao']);
+        $url = Url::to(['/expurgo/view', 'id' => $expurgo->id]);
         return $this->redirect($url);
     }
 }

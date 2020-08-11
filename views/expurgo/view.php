@@ -1,9 +1,9 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 use kartik\grid\GridView;
-
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Expurgo */
@@ -31,6 +31,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['attribute' => 'material.nome'],
             'quantidade',
+            'observacao',
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{editar}',
+                'header' => 'Editar Observacao',
+                'buttons' => [
+                    'editar' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="btn btn-light glyphicon glyphicon-pencil"></span>',
+                            Url::to(['expurgo-material/update', 'id' => $model->id]),
+                            [
+                                'title' => 'editar',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+                ]
+            ],
         ],
     ]); ?>
 

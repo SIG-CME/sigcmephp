@@ -12,6 +12,7 @@ use Yii;
  * @property int $carga_id
  * @property int $id
  * @property int|null $quantidade
+ * @property string $observacao
  *
  * @property Carga $carga
  * @property Expurgo $expurgo
@@ -40,6 +41,7 @@ class ExpurgoMaterial extends \yii\db\ActiveRecord
             [['carga_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carga::class, 'targetAttribute' => ['carga_id' => 'id']],
             [['expurgo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Expurgo::class, 'targetAttribute' => ['expurgo_id' => 'id']],
             [['material_id'], 'exist', 'skipOnError' => true, 'targetClass' => Material::class, 'targetAttribute' => ['material_id' => 'id']],
+            [['observacao'], 'string', 'max' => 500], 
         ];
     }
 
@@ -54,6 +56,7 @@ class ExpurgoMaterial extends \yii\db\ActiveRecord
             'carga_id' => Yii::t('app', 'Carga ID'),
             'id' => Yii::t('app', 'ID'),
             'quantidade' => Yii::t('app', 'Quantidade'),
+            'observacao' => Yii::t('app', 'Observacao'),
         ];
     }
 
