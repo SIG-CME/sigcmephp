@@ -77,9 +77,9 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; SIG-CME <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-right">Desenvolvido por <a href="https://eliezerzarpelao.eti.br" target="_blank">https://eliezerzarpelao.eti.br</a></p>
     </div>
 </footer>
 

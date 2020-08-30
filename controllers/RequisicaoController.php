@@ -57,6 +57,7 @@ class RequisicaoController extends Controller
     {
         $searchModel = new RequisicaoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->where(['status' => ['Coleta','Distribuicao']]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -224,13 +225,14 @@ class RequisicaoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreateExpurgo()
+    public function actionCreateExpurgo($keys)
     {
+        $vetorIds = explode(",",$keys);
         # Primeiro executa a query pra verificar se existe alguma requisição de coleta
         $result = new \yii\db\Query();
         $result->select(['rm.material_id', 'SUM(rm.quantidade) AS quantidade'])
             ->from('requisicao r')
-            ->where(['r.status' => 'Coleta'])
+            ->where(['r.status' => 'Coleta','r.id' => $vetorIds])
             ->innerJoin('requisicao_material rm', 'r.id = rm.requisicao_id')
             ->groupBy(['rm.material_id'])
             ->all();
@@ -272,7 +274,7 @@ class RequisicaoController extends Controller
         }
 
         #Atualiza as requisições
-        Yii::$app->db->createCommand("UPDATE requisicao SET status = 'Expurgo' WHERE status = 'Coleta'")->execute();
+        Yii::$app->db->createCommand("UPDATE requisicao SET status = 'Expurgo' WHERE status = 'Coleta' and id in ($keys)")->execute();
 
         $url = Url::to(['/expurgo/view', 'id' => $expurgo->id]);
         return $this->redirect($url);
