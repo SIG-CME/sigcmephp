@@ -86,7 +86,7 @@ class RequisicaoMaterialController extends Controller
         $dataProvider->query->where(['requisicao_id' => $model->requisicao_id]);
 
         $idsJaSelecionados = RequisicaoMaterial::find()->where(['requisicao_id' => $model->requisicao_id])->select(['material_id']);
-        $materiaisDisponiveis = Material::find()->where(['not in','id',$idsJaSelecionados])->all();
+        $materiaisDisponiveis = Material::find()->where(['not in','id',$idsJaSelecionados])->orderBy('nome')->all();
 
         return $this->render('create', [
             'model' => $model,
