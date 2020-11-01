@@ -18,6 +18,7 @@ $filterStatus = [
     ""=>"Todos",
     "Coleta"=>"Coleta", 
     "Expurgo"=>"Expurgo",
+    "Distribuicao"=>"Distribuição",
     "Processada"=>"Processada"];
 ?>
 
