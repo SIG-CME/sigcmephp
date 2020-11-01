@@ -57,7 +57,7 @@ class RequisicaoController extends Controller
     {
         $searchModel = new RequisicaoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->where(['status' => ['Coleta','Distribuicao']]);
+        #$dataProvider->query->where(['status' => ['Coleta','Distribuicao']]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -274,7 +274,7 @@ class RequisicaoController extends Controller
         }
 
         #Atualiza as requisições
-        Yii::$app->db->createCommand("UPDATE requisicao SET status = 'Expurgo' WHERE status = 'Coleta' and id in ($keys)")->execute();
+        Yii::$app->db->createCommand("UPDATE requisicao SET status = 'Expurgo', expurgo_id = $expurgo->id WHERE status = 'Coleta' and id in ($keys)")->execute();
 
         $url = Url::to(['/expurgo/view', 'id' => $expurgo->id]);
         return $this->redirect($url);

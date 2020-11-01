@@ -94,12 +94,21 @@ $gridColumns = [
     </p>
 
     <?php Pjax::begin(); ?>
-    <?php 
-   
+
+    <?= $this->render('_search', ['model' => $searchModel]) ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'id' => 'gridReq',
+        'columns' => $gridColumns,
+    ]); ?>
+
+    <?php
+
     echo ExportMenu::widget([
         'dataProvider' => $dataProvider,
         'columns' => $gridColumns,
-        'columnSelectorOptions'=>[
+        'columnSelectorOptions' => [
             'label' => 'Selecionar colunas',
         ],
         'dropdownOptions' => [
@@ -108,13 +117,6 @@ $gridColumns = [
         ]
     ]);
     ?>
-
-    
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'id' => 'gridReq',
-        'columns' => $gridColumns,
-    ]); ?>
 
     <?php Pjax::end(); ?>
 

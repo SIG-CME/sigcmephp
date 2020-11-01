@@ -79,6 +79,8 @@ class CargaController extends Controller
             $model->data = MyFormatter::convert($model->data, 'datetime');
             #Atualiza as requisições
             Yii::$app->db->createCommand("UPDATE expurgo_material SET carga_id = $model->id WHERE carga_id is null and material_id in (select id from material where categoriaid = $model->categoriaid);")->execute();
+
+            Yii::$app->db->createCommand("UPDATE requisicao SET status = 'Processada' WHERE status = 'Expurgo' AND expurgo_id > 0 AND expurgo_id not in (SELECT expurgo_id FROM expurgo_material WHERE carga_id IS NULL) ")->execute();
             
             return $this->redirect(['view', 'id' => $model->id]);
         }

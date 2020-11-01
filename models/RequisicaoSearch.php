@@ -17,8 +17,8 @@ class RequisicaoSearch extends Requisicao
     public function rules()
     {
         return [
-            [['id', 'unidadeid'], 'integer'],
-            [['data'], 'safe'],
+            [['id', 'unidadeid', 'expurgo_id'], 'integer'],
+            [['data', 'tipo', 'status'], 'safe'],
         ];
     }
 
@@ -61,7 +61,11 @@ class RequisicaoSearch extends Requisicao
             'id' => $this->id,
             'data' => $this->data,
             'unidadeid' => $this->unidadeid,
+            'expurgo_id' => $this->expurgo_id,
         ]);
+
+        $query->andFilterWhere(['ilike', 'tipo', $this->tipo])
+            ->andFilterWhere(['ilike', 'status', $this->status]);
 
         return $dataProvider;
     }
