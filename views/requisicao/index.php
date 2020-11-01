@@ -20,6 +20,10 @@ $("#btn-criar-expurgo").on("click", function() {
     }
     krajeeDialog.confirm("Tem certeza que deseja criar o expurgo?", function (result) {
         if (result) {
+            if (!keys){
+                krajeeDialog.alert("Nenhuma requisição selecionada. Somente requisições com status Coleta podem ser enviadas a expurgo.");
+                return;
+            }
             window.location.href = '/requisicao/create-expurgo/?keys='+keys;
         };
     });
