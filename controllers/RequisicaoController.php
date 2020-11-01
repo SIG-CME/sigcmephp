@@ -227,6 +227,10 @@ class RequisicaoController extends Controller
      */
     public function actionCreateExpurgo($keys)
     {
+        if ($keys==""){
+            Yii::$app->session->setFlash('error', 'Nenhuma requisição selecionada. Somente requisições com status Coleta podem ser enviadas a expurgo.');
+            return $this->actionIndex();
+        }
         $vetorIds = explode(",",$keys);
         # Primeiro executa a query pra verificar se existe alguma requisição de coleta
         $result = new \yii\db\Query();
