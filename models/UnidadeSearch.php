@@ -46,6 +46,11 @@ class UnidadeSearch extends Unidade
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'descricao' => SORT_ASC, 
+                ]
+            ],
         ]);
 
         $this->load($params);

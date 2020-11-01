@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use app\models\CleanForm;
 use app\models\ContactForm;
 
 class SiteController extends Controller
@@ -124,5 +125,31 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionClean()
+    {
+        $model = new CleanForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->clean()) {
+                Yii::$app->db->createCommand("delete from expurgo_material;")->execute();
+                Yii::$app->db->createCommand("delete from expurgo;")->execute();
+                Yii::$app->db->createCommand("delete from carga;")->execute();
+                Yii::$app->db->createCommand("delete from requisicao_material;")->execute();
+                Yii::$app->db->createCommand("delete from requisicao;")->execute();
+
+                Yii::$app->session->setFlash('error', 'Base limpa!');
+            }
+            else{
+                Yii::$app->session->setFlash('error', 'Senha inválida!');
+            }
+
+            #return $this->goBack();
+        }
+
+        $model->password = '';
+        return $this->render('clean', [
+            'model' => $model,
+        ]);
     }
 }
